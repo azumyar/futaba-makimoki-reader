@@ -1,0 +1,371 @@
+<Window
+    x:Class="Yarukizero.Net.MakiMoki.Reader.Windows.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:ri="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Yarukizero.Net.MakiMoki.Reader.Windows"
+    mc:Ignorable="d"
+    Title="MainWindow" Height="450" Width="450">
+    <Grid>
+        <Border Padding="4" Visibility="{Binding StartViewVisibility.Value}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="4*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="4*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Button
+                    Grid.Column="1" Grid.Row="1"
+                    Content="スレを立てて読む"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding NavigateToPostThreadCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button
+                    Grid.Column="1" Grid.Row="3"
+                    Content="既存のスレを読む"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding NavigateToPostedThreadCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border Padding="4" Visibility="{Binding PostThreadViewVisibility.Value}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="4" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="0"
+                    Text="板URL"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="0"
+                    Text="{Binding BoardUrl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBlock
+                    Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2"
+                    Text="https://***.net/*/まで入力してください"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="4"
+                    Text="題名"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="4"
+                    Text="{Binding Subject.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBlock
+                    Grid.Column="0" Grid.Row="6"
+                    Text="名前"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="6"
+                    Text="{Binding Name.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBlock
+                    Grid.Column="0" Grid.Row="8"
+                    Text="メール"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="8"
+                    Text="{Binding Mail.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="10"
+                    VerticalAlignment="Center"
+                    Text="画像"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <Button
+                    Grid.Column="3" Grid.Row="10"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Content="{Binding ImageButtonText.Value, Mode=OneWay}"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding OpenImageCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                
+                <TextBlock
+                    Grid.Column="0" Grid.Row="12"
+                    Text="本文"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="12"
+                    AcceptsReturn="True"
+                    Text="{Binding Comment.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBlock
+                    Grid.Column="0" Grid.Row="14"
+                    Text="削除パス"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="14"
+                    Text="{Binding DelKey.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <Button
+                    Grid.Column="0" Grid.Row="16"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Content="戻る"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding NavigateBackCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+
+                <Button
+                    Grid.Column="3" Grid.Row="16"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Content="開始"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding PostThreadCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border Padding="4" Visibility="{Binding PostedThreadViewVisibility.Value}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="4" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="0"
+                    Text="スレッドURL"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="0"
+                    Text="{Binding InputUrl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    />
+                <TextBlock
+                    Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2"
+                    Text="https://***.net/*/res/***.htmまで入力してください"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <Button
+                    Grid.Column="0" Grid.Row="3"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Content="戻る"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding NavigateBackCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+
+                <Button
+                    Grid.Column="3" Grid.Row="3"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Content="開始"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding StartReaderFromInputCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border Padding="4" Visibility="{Binding ReaderViewVisibility.Value}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="0"
+                    VerticalAlignment="Center"
+                    Text="{Binding ReadingMessage.Value, Mode=OneWay}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <Button
+                    Grid.Column="1" Grid.Row="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Content="ブラウザで開く"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding OpenBrowserCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="2"
+                    Visibility="{Binding NextReaderVisibility.Value, Mode=OneWay}"
+                    Text="画像"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <Button
+                    Grid.Column="3" Grid.Row="2"
+                    Visibility="{Binding NextReaderVisibility.Value, Mode=OneWay}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Content="{Binding ImageButtonText.Value, Mode=OneWay}"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding OpenImageCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="12"
+                    Visibility="{Binding NextReaderVisibility.Value, Mode=OneWay}"
+                    Text="本文"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="1" Grid.Row="4"
+                    Visibility="{Binding NextReaderVisibility.Value, Mode=OneWay}"
+                    AcceptsReturn="true"
+                    Text="{Binding Comment.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    />
+
+                <Button
+                    Grid.Column="0" Grid.Row="5"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Bottom"
+                    Content="戻る"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding NavigateBackCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+
+                <Button
+                    Grid.Column="3" Grid.Row="5"
+                    Visibility="{Binding NextReaderVisibility.Value, Mode=OneWay}"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Content="スレ立て"
+                    Padding="8,4,8,4"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding PostThreadCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

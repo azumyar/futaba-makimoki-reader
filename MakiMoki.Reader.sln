@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MakiMoki.Reader", "src\MakiMoki.Reader\MakiMoki.Reader.csproj", "{840AFC98-FD04-4D98-AABB-45320E1CB7B5}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MakiMoki.Reader.Shared", "src\MakiMoki.Reader.Shared\MakiMoki.Reader.Shared.shproj", "{725C6979-DB11-45CE-A9DB-0433255AD709}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{840AFC98-FD04-4D98-AABB-45320E1CB7B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{840AFC98-FD04-4D98-AABB-45320E1CB7B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{840AFC98-FD04-4D98-AABB-45320E1CB7B5}.Debug|x64.ActiveCfg = Debug|x64
+		{840AFC98-FD04-4D98-AABB-45320E1CB7B5}.Debug|x64.Build.0 = Debug|x64
+		{840AFC98-FD04-4D98-AABB-45320E1CB7B5}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{840AFC98-FD04-4D98-AABB-45320E1CB7B5}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{840AFC98-FD04-4D98-AABB-45320E1CB7B5}.Release|x64.ActiveCfg = Release|x64
+		{840AFC98-FD04-4D98-AABB-45320E1CB7B5}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A292D78E-70F3-42E7-B86C-87CE51D3F862}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\MakiMoki.Reader.Shared\MakiMoki.Reader.Shared.projitems*{725c6979-db11-45ce-a9db-0433255ad709}*SharedItemsImports = 13
+		src\MakiMoki.Reader.Shared\MakiMoki.Reader.Shared.projitems*{840afc98-fd04-4d98-aabb-45320e1cb7b5}*SharedItemsImports = 5
+	EndGlobalSection
+EndGlobal
