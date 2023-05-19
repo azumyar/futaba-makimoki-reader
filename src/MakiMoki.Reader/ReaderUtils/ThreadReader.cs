@@ -69,7 +69,7 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 								if(x.Successed) {
 									futabaCtx = x.Data;
 									if(x.RawResponse.Res == null) {
-										Logger.Instance.Info($"新着レスなし");
+										Logger.Instance.Debug($"新着レスなし");
 									} else {
 										Logger.Instance.Info($"{x.RawResponse.Res.Length}件の新しいレス");
 										foreach(var res in x.RawResponse.Res) {
