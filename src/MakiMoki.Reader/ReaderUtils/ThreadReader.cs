@@ -214,15 +214,14 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 									b.Save(save);
 								}
 								Logger.Instance.Info($"レス画像を保存しました => {f}");
+								FireEvent(
+									ReaderConfigs.ConfigLoader.Config.EnabledSpeakImageSave,
+									ReaderConfigs.ConfigLoader.Config.SoundImageSave,
+									ReaderConfigs.ConfigLoader.Config.MessageImageSave);
 							}
 							catch(IOException e) {
 								Logger.Instance.Info($"レス画像を保存でエラー\r\n{e.ToString()}");
 							}
-
-							FireEvent(
-								ReaderConfigs.ConfigLoader.Config.EnabledSpeakImageSave,
-								ReaderConfigs.ConfigLoader.Config.SoundImageSave,
-								ReaderConfigs.ConfigLoader.Config.MessageImageSave);
 						}
 					});
 			}
@@ -259,6 +258,10 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 								var f = Path.Combine(dir, y.Name);
 								File.WriteAllBytes(f, y.File);
 								Logger.Instance.Info($"アップロードファイルを保存しました => {f}");
+								FireEvent(
+									ReaderConfigs.ConfigLoader.Config.EnabledSpeakImageSave,
+									ReaderConfigs.ConfigLoader.Config.SoundImageSave,
+									ReaderConfigs.ConfigLoader.Config.MessageImageSave);
 							}
 							catch(IOException e) {
 								Logger.Instance.Info($"アップロードファイルを保存でエラー\r\n{e.ToString()}");
