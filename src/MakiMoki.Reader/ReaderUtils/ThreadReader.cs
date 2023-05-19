@@ -15,6 +15,8 @@ using System.ComponentModel.Design.Serialization;
 using static Yarukizero.Net.MakiMoki.Config.ConfigLoader;
 using Yarukizero.Net.MakiMoki.Data;
 using static System.Net.Mime.MediaTypeNames;
+using NAudio.Wave;
+using Microsoft.VisualBasic.Devices;
 
 namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 	internal static class ThreadReader {
@@ -75,12 +77,12 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 										foreach(var res in x.RawResponse.Res) {
 											var id = string.IsNullOrEmpty(res.Res.Id) switch {
 												true => true,
-												false when ReaderConfigs.ConfigLoader.Config.SpeakId => true,
+												false when ReaderConfigs.ConfigLoader.Config.IsSpeakId => true,
 												false => false
 											};
 											var del = (res.Res.IsDel || res.Res.IsDel2 || res.Res.IsSelfDel) switch {
 												false => true,
-												true when ReaderConfigs.ConfigLoader.Config.SpeakDel => true,
+												true when ReaderConfigs.ConfigLoader.Config.IsSpeakDel => true,
 												true => false
 											};
 
@@ -120,9 +122,9 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 
 							});
 						try {
-							await Task.Delay(Math.Max(ReaderConfigs.ConfigLoader.Config.FetchApiWaitTimeMiliSec, 30 * 1000), cancelSource.Token);
+							await Task.Delay(Math.Max(ReaderConfigs.ConfigLoader.Config.WaitTimeFetchApiMiliSec, 30 * 1000), cancelSource.Token);
 						}
-						catch (Exception ex) { }
+						catch (OperationCanceledException) { }
 					}
 				});
 
@@ -179,9 +181,24 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 				});
 		}
 
-		private static void PlaySound() {
+		private static void PlaySound(string file) {
+			var path = file;
+			Logger.Instance.Debug($"サウンドプッシュ({file})");
+			if(path.IndexOf("\\") < 0) {
+				path = Path.Combine(AppContext.BaseDirectory, "Sound.d", path);
+			}
+			Observable.Return(path)
+				.ObserveOn(BouyomiChanScheduler)
+				.Subscribe(p => {
+					Logger.Instance.Debug($"サウンド再生開始({p})");
+					using var reader = new AudioFileReader(p);
+					using var waveOut = new WaveOut();
+					waveOut.Init(reader);
+					waveOut.Play();
 
-		}
+					while(waveOut.PlaybackState == PlaybackState.Playing) ;
+				});
+			}
 
 		private static string Html2Text(string html) {
 			return Util.TextUtil.RowComment2Text(html);
@@ -274,7 +291,8 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 
 		public static void FireEvent(ReaderData.SpeakMessage msg, string sound, string message) {
 			switch(msg) {
-			case ReaderData.SpeakMessage.Wave:
+			case ReaderData.SpeakMessage.Sound:
+				PlaySound(sound);
 				break;
 			case ReaderData.SpeakMessage.BouyomiChan:
 				Speak(message);

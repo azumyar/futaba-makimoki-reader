@@ -1,5 +1,5 @@
 {
-  "version": 2023051801,
+  "version": 2023052001,
   "bouyomichan-endpoint": "http://localhost:50080/",
   "speak-id": false,
   "speak-del": false,
@@ -8,15 +8,16 @@
   "enable-speak-image-save": 2,
   "enable-speak-thread-old": 2,
   "enable-speak-thread-die": 2,
-  "sound-speak-thread-created": "",
-  "sound-speak-start-read": "",
-  "sound-speak-image-save": "",
-  "sound-speak-thread-old": "",
-  "sound-speak-thread-die": "",
+  "sound-speak-thread-created": "スレッドが立ちました。.mp3",
+  "sound-speak-start-read": "読み上げを開始します。.mp3",
+  "sound-speak-image-save": "手書きを保存しました。.mp3",
+  "sound-speak-thread-old": "もうすぐスレッドが落ちます。.mp3",
+  "sound-speak-thread-die": "スレッドが落ちました。読み上げを終了します。.mp3",
   "bouyomichan-speak-thread-created": "スレッドが立ちました。",
   "bouyomichan-speak-start-read": "読み上げを開始します。",
   "bouyomichan-speak-image-save": "手書きを保存しました。",
   "bouyomichan-speak-thread-old": "もうすぐスレッドが落ちます。",
   "bouyomichan-speak-thread-die": "スレッドが落ちました。読み上げを終了します。",
-  "fetch-api-waittime": 30000
+  "waittime-thread-old": 300000,
+  "waittime-fetch-api": 30000
 }

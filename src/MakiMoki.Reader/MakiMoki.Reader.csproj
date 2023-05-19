@@ -6,11 +6,11 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <!--RuntimeIdentifiers>win-x86;win-x64</RuntimeIdentifiers -->
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <Platform>Any CPU;x64</Platform>
     <RootNamespace>Yarukizero.Net.MakiMoki.Reader</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
-    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -30,6 +30,11 @@
   <ItemGroup>
     <None Remove="Config.d\makimoki.reader.config.json" />
     <None Remove="Config.d\makimoki.reader.ng.json" />
+    <None Remove="Sound.d\もうすぐスレッドが落ちます。.mp3" />
+    <None Remove="Sound.d\スレッドが立ちました。.mp3" />
+    <None Remove="Sound.d\スレッドが落ちました。読み上げを終了します。.mp3" />
+    <None Remove="Sound.d\手書きを保存しました。.mp3" />
+    <None Remove="Sound.d\読み上げを開始します。.mp3" />
   </ItemGroup>
     
   <ItemGroup>
@@ -39,10 +44,27 @@
     <Content Include="Config.d\makimoki.reader.ng.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Sound.d\もうすぐスレッドが落ちます。.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sound.d\スレッドが立ちました。.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sound.d\スレッドが落ちました。読み上げを終了します。.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sound.d\手書きを保存しました。.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sound.d\読み上げを開始します。.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.0.1" />
+    <PackageReference Include="NAudio" Version="2.1.0" />
+    <PackageReference Include="NAudio.Core" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Prism.Unity" Version="8.1.97" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />

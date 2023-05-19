@@ -9,7 +9,9 @@
     xmlns:log="clr-namespace:Yarukizero.Net.MakiMoki.Reader.ReaderUtils"
     xmlns:local="clr-namespace:Yarukizero.Net.MakiMoki.Reader.Windows"
     mc:Ignorable="d"
-    Title="MainWindow" Height="450" Width="450">
+    Title="ふたマキリーダー"
+    Width="450" Height="450"
+    MinWidth="450" MinHeight="450">
     <Grid>
         <Border Padding="4" Visibility="{Binding StartViewVisibility.Value}">
             <Grid>
