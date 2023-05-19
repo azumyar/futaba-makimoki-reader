@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -43,6 +44,12 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderConfigs {
 
 		public static ReaderData.ReaderConfig Config { get; private set; } = new ReaderData.ReaderConfig();
 		public static ReaderData.NgConfig NgConfig { get; private set; } = new ReaderData.NgConfig();
+
+		public static (string Regex, string Root)[] UploaderRegex { get; private set; } = new[] {
+			("f\\d+\\.[a-zA-Z0-9]+", "https://dec.2chan.net/up/src/"),
+			("fu\\d+\\.[a-zA-Z0-9]+", "https://dec.2chan.net/up2/src/"),
+		};
+
 
 		public static void Initialize() {
 			{

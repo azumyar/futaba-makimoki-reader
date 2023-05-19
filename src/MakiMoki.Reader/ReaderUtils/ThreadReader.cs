@@ -10,6 +10,10 @@ using RestSharp;
 using System.Web;
 using System.Net.Sockets;
 using System.IO;
+using Unity.Injection;
+using System.ComponentModel.Design.Serialization;
+using static Yarukizero.Net.MakiMoki.Config.ConfigLoader;
+using Yarukizero.Net.MakiMoki.Data;
 
 namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 	internal static class ThreadReader {
@@ -48,7 +52,7 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 					while(!cancelSource.IsCancellationRequested && !(futabaCtx.Raw?.IsDie ?? false)) {
 						Util.FutabaApiReactive.GetThreadRes(board, threadNo, futabaCtx, App.Current.Cookie, true)
 							.ObserveOn(FutabaScheduler)
-							.Subscribe(async x => {
+							.Subscribe(x => {
 								App.Current.Cookie = x.Cookies;
 								if(x.Successed) {
 									futabaCtx = x.Data;
@@ -66,60 +70,27 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 											};
 
 											if(id && del) {
-												o.OnNext(Html2Text(res.Res.Com));
-												if(res.Res.IsHavedImage) {
-													Observable.Return(res.Res)
-														.Select(async y => {
-															return (Name: y.Src.Replace('/', '_'), File: await Util.FutabaApi.GetThreadResImage(board.Url, y));
-														})
-														.ObserveOn(FileSaveScheduler)
-														.Subscribe(y => {
-															if(y.Result.File != null) {
-																try {
-																	if(!Directory.Exists(dir)) {
-																		Directory.CreateDirectory(dir);
-																	}
-																	var f = Path.Combine(dir, y.Result.Name);
-																	File.WriteAllBytes(f, y.Result.File);
-
-																	using var b = System.Drawing.Bitmap.FromFile(f);
-																	b.Save(Path.Combine(App.Current.RederDirectory, "save.png"));
-																}
-																catch(IOException) { }
-
-																switch(ReaderConfigs.ConfigLoader.Config.EnabledSpeakThreadDie) {
-																case ReaderData.SpeakMessage.Wave:
-																	break;
-																case ReaderData.SpeakMessage.BpuyomiChan:
-																	o.OnNext(ReaderConfigs.ConfigLoader.Config.MessageImageSave);
-																	break;
-																}
-															}
-														});
-												}
+												var com = Html2Text(res.Res.Com);
+												o.OnNext(com);
+												DownloadResImage(board, res, dir);
+												DownloadUploader(com, dir);
 											}
 										}
 									}
 									if(!isOld && x.RawResponse.DieDateTime.HasValue && x.RawResponse.NowDateTime.HasValue) {
 										if((x.RawResponse.DieDateTime.Value - x.RawResponse.NowDateTime.Value).TotalMilliseconds < 5 * 60 * 1000) {
-											switch(ReaderConfigs.ConfigLoader.Config.EnabledSpeakThreadOld) {
-											case ReaderData.SpeakMessage.Wave:
-												break;
-											case ReaderData.SpeakMessage.BpuyomiChan:
-												o.OnNext(ReaderConfigs.ConfigLoader.Config.MessageThreadOld);
-												break;
-											}
+											FireEvent(
+												ReaderConfigs.ConfigLoader.Config.EnabledSpeakThreadOld,
+												ReaderConfigs.ConfigLoader.Config.SoundThreadOld,
+												ReaderConfigs.ConfigLoader.Config.MessageThreadOld);
 											isOld = true;
 										}
 									}
 									if(x.RawResponse.IsDie) {
-										switch(ReaderConfigs.ConfigLoader.Config.EnabledSpeakThreadDie) {
-										case ReaderData.SpeakMessage.Wave:
-											break;
-										case ReaderData.SpeakMessage.BpuyomiChan:
-											o.OnNext(ReaderConfigs.ConfigLoader.Config.MessageSpeakThreadDie);
-											break;
-										}
+										FireEvent(
+											ReaderConfigs.ConfigLoader.Config.EnabledSpeakThreadDie,
+											ReaderConfigs.ConfigLoader.Config.SoundSpeakThreadDie,
+											ReaderConfigs.ConfigLoader.Config.MessageSpeakThreadDie);
 										Observable.Return(0)
 											.ObserveOn(Reactive.Bindings.UIDispatcherScheduler.Default)
 											.Subscribe(_ => {
@@ -198,6 +169,92 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 
 		private static string Html2Text(string html) {
 			return Util.TextUtil.RowComment2Text(html);
+		}
+
+		private static void DownloadResImage(BoardData board, Data.NumberedResItem res, string dir) {
+			if(res.Res.IsHavedImage) {
+				Observable.Return(res.Res)
+				.Select(async y => {
+						return (Name: y.Src.Replace('/', '_'), File: await Util.FutabaApi.GetThreadResImage(board.Url, y));
+					})
+					.ObserveOn(FileSaveScheduler)
+					.Subscribe(y => {
+						if(y.Result.File != null) {
+							try {
+								if(!Directory.Exists(dir)) {
+									Directory.CreateDirectory(dir);
+								}
+								var f = Path.Combine(dir, y.Result.Name);
+								var save = Path.Combine(App.Current.RederDirectory, "save.png");
+								File.WriteAllBytes(f, y.Result.File);
+
+								if(Path.GetExtension(f).ToLower() == ".png") {
+									File.Copy(f, save);
+								} else {
+									using var b = System.Drawing.Bitmap.FromFile(f);
+									b.Save(save);
+								}
+							}
+							catch(IOException) { }
+
+							FireEvent(
+								ReaderConfigs.ConfigLoader.Config.EnabledSpeakThreadDie,
+								ReaderConfigs.ConfigLoader.Config.SoundSpeakThreadDie,
+								ReaderConfigs.ConfigLoader.Config.MessageSpeakThreadDie);
+						}
+					});
+			}
+		}
+
+		private static void DownloadUploader(string com, string dir) {
+			foreach(var it in ReaderConfigs.ConfigLoader.UploaderRegex) {
+				foreach(Match m in Regex.Matches(com, it.Regex, RegexOptions.Multiline)) {
+					Observable.Return((Name: m.Value, Root: it.Root))
+						.ObserveOn(System.Reactive.Concurrency.NewThreadScheduler.Default)
+						.Select<(string Name, string Root), (string?, byte[]?)>(y => {
+							try {
+								var c = new RestClient($"{y.Root}{y.Name}") {
+									UserAgent = Config.ConfigLoader.InitializedSetting.RestUserAgent,
+									Timeout = 5000,
+								};
+								var ret = c.Execute(new RestRequest(Method.GET));
+								if(ret.StatusCode == System.Net.HttpStatusCode.OK) {
+									return (y.Name, ret.RawBytes);
+								}
+							}
+							catch(Exception e) when(e is SocketException || e is TimeoutException) {
+								// TODO: エラー処理
+							}
+							return (null, null);
+						}).ObserveOn(FileSaveScheduler)
+					.Subscribe<(string? Name, byte[]? File)>(y => {
+						if((y.Name != null) && (y.File != null)) {
+							try {
+								if(!Directory.Exists(dir)) {
+									Directory.CreateDirectory(dir);
+								}
+								var f = Path.Combine(dir, y.Name);
+								File.WriteAllBytes(f, y.File);
+							}
+							catch(IOException e) { }
+						}
+					});
+				}
+			}
+		}
+
+		private static void FireEvent(ReaderData.SpeakMessage msg, string sound, string message) {
+			switch(msg) {
+			case ReaderData.SpeakMessage.Wave:
+				break;
+			case ReaderData.SpeakMessage.BouyomiChan:
+				SpeakCore(
+					new RestClient(ReaderConfigs.ConfigLoader.Config.BouyomiChanEndPoint) {
+						UserAgent = Config.ConfigLoader.InitializedSetting.RestUserAgent,
+						Timeout = 5000,
+					}, message);
+				break;
+			}
 		}
 	}
 }

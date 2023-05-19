@@ -6,3 +6,4 @@ packages/
 publish/
 *.csproj.user
 
+*.user
