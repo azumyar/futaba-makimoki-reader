@@ -174,7 +174,7 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 			this.OpenBrowserCommand.Subscribe(() => {
 				const int SW_SHOW = 5;
 				var url =string.IsNullOrEmpty(this.InputUrl.Value) switch {
-					true => $"{this.BoardUrl.Value}/res/{this.threadNo}.htm",
+					true => $"{this.BoardUrl.Value}res/{this.threadNo}.htm",
 					false => this.InputUrl.Value,
 				};
 				ShellExecute(IntPtr.Zero, null, url, null, null, SW_SHOW);
