@@ -52,6 +52,22 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
+
+                <Button
+                    Grid.Column="0" Grid.ColumnSpan="3"
+                    Grid.Row="0" Grid.RowSpan="5"
+                    Width="32" Height="32"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    Content="{StaticResource FontSymbolSettings}"
+                    FontFamily="{StaticResource MakimokiSymbolFont}"
+                    >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ri:EventToReactiveCommand Command="{Binding ConfigClickCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
             </Grid>
         </Border>
 
@@ -312,8 +328,7 @@
                     HorizontalScrollBarVisibility="Auto"
                     AcceptsReturn="True"
                     IsReadOnly="True"
-                    Text="{Binding Log.Value, Mode=OneWay}"
-                    DataContext="{x:Static log:Logger.Instance}">
+                    Text="{Binding Log.Value, Mode=OneWay, Source={x:Static log:Logger.Instance}}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="TextChanged">
                             <i:CallMethodAction

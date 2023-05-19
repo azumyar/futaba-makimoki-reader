@@ -7,6 +7,20 @@ using System.Threading.Tasks;
 using Yarukizero.Net.MakiMoki.Data;
 
 namespace Yarukizero.Net.MakiMoki.Reader.ReaderData {
+	internal class AppConfig : Data.ConfigObject {
+		public static int CurrentVersion { get; } = 2023052001;
+
+		[JsonProperty("cookie", Required = Required.Always)]
+		public Data.Cookie2[] Cookies { get; set; } = Array.Empty<Data.Cookie2>();
+		[JsonProperty("ptua", Required = Required.Always)]
+		public string Ptua { get; set; } = "";
+		[JsonProperty("board", Required = Required.Always)]
+		public string Board { get; set; } = "";
+		[JsonProperty("password", Required = Required.Always)]
+		public string Password { get; set; } = "";
+		
+	}
+
 	internal class ReaderConfig : Data.ConfigObject {
 		public static int CurrentVersion { get; } = 2023052001;
 
@@ -16,6 +30,13 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderData {
 		public bool IsSpeakId { get; private set; } = false;
 		[JsonProperty("speak-del", Required = Required.Always)]
 		public bool IsSpeakDel { get; private set; } = false;
+
+		[JsonProperty("save-res-image", Required = Required.Always)]
+		public bool EnabledSaveResImage { get; private set; } = false;
+		[JsonProperty("save-uploader", Required = Required.Always)]
+		public bool EnabledSaveUploadFile { get; private set; } = false;
+		[JsonProperty("save-log", Required = Required.Always)]
+		public bool EnabledSaveLog { get; private set; } = false;
 		[JsonProperty("enable-speak-thread-created", Required = Required.Always)]
 		public SpeakMessage EnabledSpeakThreadCreated { get; private set; } = SpeakMessage.Disable;
 		[JsonProperty("enable-speak-start-read", Required = Required.Always)]
@@ -61,6 +82,9 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderData {
 			string bouyomiChanEndPoint,
 			bool speakId,
 			bool speakDel,
+			bool saveResImage,
+			bool saveUploader,
+			bool saveLog,
 			SpeakMessage enabledSpeakThreadCreated,
 			SpeakMessage enabledSpeakStartRead,
 			SpeakMessage enabledSpeakImageSave,
@@ -84,6 +108,9 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderData {
 			this.BouyomiChanEndPoint = bouyomiChanEndPoint;
 			this.IsSpeakId = speakId;
 			this.IsSpeakDel = speakDel;
+			this.EnabledSaveResImage = saveResImage;
+			this.EnabledSaveUploadFile = saveUploader;
+			this.EnabledSaveLog = saveResImage;
 			this.EnabledSpeakThreadCreated = enabledSpeakThreadCreated;
 			this.EnabledSpeakStartRead = enabledSpeakStartRead;
 			this.EnabledSpeakImageSave = enabledSpeakImageSave;
@@ -114,9 +141,25 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderData {
 		public static int CurrentVersion { get; } = 2023051801;
 
 		[JsonProperty("ng", Required = Required.Always)]
-		public string[] NgWords { get; private set; } = Array.Empty<string>();
+		public string[] NgWords { get; private set; }
 
 		[JsonProperty("ng-regex", Required = Required.Always)]
-		public string[] NgRegex { get; private set; } = Array.Empty<string>();
+		public string[] NgRegex { get; private set; }
+
+		public NgConfig() {
+			this.Version = CurrentVersion;
+			this.NgWords = Array.Empty<string>();
+			this.NgRegex = Array.Empty<string>();
+		}
+
+		public NgConfig(
+			string[] ngWords,
+			string[] ngRegex
+			) {
+			this.Version = CurrentVersion;
+			this.NgWords = ngWords;
+			this.NgRegex = ngRegex;
+		}
+
 	}
 }

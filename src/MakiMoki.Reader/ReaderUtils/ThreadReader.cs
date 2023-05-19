@@ -13,10 +13,10 @@ using System.IO;
 using Unity.Injection;
 using System.ComponentModel.Design.Serialization;
 using static Yarukizero.Net.MakiMoki.Config.ConfigLoader;
-using Yarukizero.Net.MakiMoki.Data;
 using static System.Net.Mime.MediaTypeNames;
 using NAudio.Wave;
 using Microsoft.VisualBasic.Devices;
+using Yarukizero.Net.MakiMoki.Reader.ReaderData;
 
 namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 	internal static class ThreadReader {
@@ -63,10 +63,10 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 						ReaderConfigs.ConfigLoader.Config.MessageStartRead);
 					while(!cancelSource.IsCancellationRequested && !(futabaCtx.Raw?.IsDie ?? false)) {
 						Logger.Instance.Debug("スレッド取得開始");
-						Util.FutabaApiReactive.GetThreadRes(board, threadNo, futabaCtx, App.Current.Cookie, true)
+						Util.FutabaApiReactive.GetThreadRes(board, threadNo, futabaCtx, ReaderConfigs.ConfigLoader.AppConfig.Cookies, true)
 							.ObserveOn(FutabaScheduler)
 							.Subscribe(x => {
-								App.Current.Cookie = x.Cookies;
+								ReaderConfigs.ConfigLoader.UpdateCookie(url, x.Cookies);
 								Logger.Instance.Debug("スレッド取得終了");
 								if(x.Successed) {
 									futabaCtx = x.Data;
@@ -204,7 +204,11 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 			return Util.TextUtil.RowComment2Text(html);
 		}
 
-		private static void DownloadResImage(BoardData board, Data.NumberedResItem res, string dir) {
+		private static void DownloadResImage(Data.BoardData board, Data.NumberedResItem res, string dir) {
+			if(!ReaderConfigs.ConfigLoader.Config.EnabledSaveResImage) {
+				return;
+			}
+
 			if(res.Res.IsHavedImage) {
 				Logger.Instance.Info($"レス画像を取得 => {res.Res.Src}");
 				Observable.Return(res.Res)
@@ -245,6 +249,10 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 		}
 
 		private static void DownloadUploader(string com, string dir) {
+			if(!ReaderConfigs.ConfigLoader.Config.EnabledSaveUploadFile) {
+				return;
+			}
+
 			foreach(var it in ReaderConfigs.ConfigLoader.UploaderRegex) {
 				foreach(Match m in Regex.Matches(com, it.Regex, RegexOptions.Multiline)) {
 					Logger.Instance.Info($"アップロードファイルを取得 => {m.Value}");
@@ -261,9 +269,7 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderUtils {
 									return (y.Name, ret.RawBytes);
 								}
 							}
-							catch(Exception e) when(e is SocketException || e is TimeoutException) {
-								// TODO: エラー処理
-							}
+							catch(Exception e) when(e is SocketException || e is TimeoutException) {}
 							return (null, null);
 						}).ObserveOn(FileSaveScheduler)
 					.Subscribe<(string? Name, byte[]? File)>(y => {

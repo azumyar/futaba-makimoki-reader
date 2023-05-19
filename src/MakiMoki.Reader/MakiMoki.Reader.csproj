@@ -15,6 +15,7 @@
 
   <PropertyGroup>
     <Copyright>Copyright © by https://dev.yarukizero.net/</Copyright>
+    <Version>0.1.0.0</Version>
     <PublishReadyToRun>false</PublishReadyToRun>
     <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
     <PublishSingleFile>true</PublishSingleFile>

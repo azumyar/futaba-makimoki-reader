@@ -7,6 +7,10 @@
     xmlns:local="clr-namespace:Yarukizero.Net.MakiMoki.Reader">
     <prism:PrismApplication.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Xaml/FontSymbolResource.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
             <FontFamily x:Key="MakimokiUiFont">Yu Gothic UI,Meiryo UI</FontFamily>
             <FontFamily x:Key="MakimokiSymbolFont">Segoe Fluent Icons,Segoe MDL2 Assets,Segoe UI Symbol</FontFamily>
         </ResourceDictionary>

@@ -1,3 +1,4 @@
+using Prism.Services.Dialogs;
 using Reactive.Bindings;
 using System;
 using System.Collections.Generic;
@@ -55,7 +56,8 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 		public IReadOnlyReactiveProperty<Visibility> CurrentReaderVisibility { get; }
 		public IReadOnlyReactiveProperty<Visibility> NextReaderVisibility { get; }
 
-
+		
+		public ReactiveCommandSlim ConfigClickCommand { get; } = new ReactiveCommandSlim();
 		public ReactiveCommandSlim NavigateBackCommand { get; } = new ReactiveCommandSlim();
 		public ReactiveCommandSlim NavigateToPostThreadCommand { get; } = new ReactiveCommandSlim();
 		public ReactiveCommandSlim NavigateToPostedThreadCommand { get; } = new ReactiveCommandSlim();
@@ -70,7 +72,12 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 		private const string MessageThreadReading = "スレッドを読み上げ中です";
 		private const string MessageThreadDie= "スレッドが落ちました";
 
-		public MainViewModel() {
+		private IDialogService DialogService { get; }
+		public MainViewModel(IDialogService dialogService) {
+			this.DialogService = dialogService;
+			this.BoardUrl.Value = ReaderConfigs.ConfigLoader.AppConfig.Board;
+			this.DelKey.Value = ReaderConfigs.ConfigLoader.AppConfig.Password;
+
 			this.StartViewVisibility = this.Navigate.Select(x => x switch {
 				Navigation.Start => Visibility.Visible,
 				_ => Visibility.Collapsed,
@@ -114,6 +121,13 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 					true => Visibility.Visible,
 					false => Visibility.Collapsed,
 				}).ToReadOnlyReactivePropertySlim();
+
+			this.ConfigClickCommand.Subscribe(() => {
+				this.DialogService.ShowDialog(
+					nameof(Windows.ConfigDialog),
+					new DialogParameters(),
+					(x) => { });
+			});
 
 			this.NavigateBackCommand.Subscribe(() => {
 				switch(this.Navigate.Value) {
@@ -196,11 +210,11 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 					comment: this.Comment.Value,
 					filePath: this.ImagePath.Value,
 					passwd: this.DelKey.Value,
-					cookies: App.Current.Cookie,
-					ptua: CreatePtua())
+					cookies: ReaderConfigs.ConfigLoader.AppConfig.Cookies,
+					ptua: ReaderConfigs.ConfigLoader.AppConfig.Ptua)
 				.ObserveOn(UIDispatcherScheduler.Default)
 				.Subscribe(x => {
-					App.Current.Cookie = x.Cookies;
+					ReaderConfigs.ConfigLoader.UpdateCookie($"{this.BoardUrl.Value}futaba.php", x.Cookies);
 					if(x.Successed) {
 						this.threadNo = x.NextOrMessage;
 						ThreadReader.FireEvent(
@@ -212,6 +226,7 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 						if(this.StartRead()) {
 							this.Navigate.Value = Navigation.Reader;
 						}
+						ReaderConfigs.ConfigLoader.UpdateThreadBoard(this.BoardUrl.Value, this.DelKey.Value);
 					} else {
 						MessageBox.Show(x.NextOrMessage);
 					}
@@ -252,15 +267,6 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 
 		private void OnThreadDie() {
 			this.IsReading.Value = false;
-		}
-
-		private static string CreatePtua() {
-			var rnd = new Random();
-			long t = 0;
-			for(var i = 0; i < 33; i++) {
-				t |= ((long)rnd.Next() % 2) << i;
-			}
-			return t.ToString();
 		}
 	}
 }

@@ -18,13 +18,7 @@ namespace Yarukizero.Net.MakiMoki.Reader {
 	/// Interaction logic for App.xaml
 	/// </summary>
 	public partial class App : PrismApplication {
-		[Obsolete]
-		public Data.Cookie2[] Cookie { get; set; } = Array.Empty<Data.Cookie2>();
-
-		public new static App? Current { get; private set; }
-
 		protected override void OnStartup(StartupEventArgs e) {
-			Current = this;
 			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 			Reactive.Bindings.UIDispatcherScheduler.Initialize();
 
@@ -40,9 +34,18 @@ namespace Yarukizero.Net.MakiMoki.Reader {
 			if(!Directory.Exists(saveDirectory)) {
 				Directory.CreateDirectory(saveDirectory);
 			}
+			var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FutaMaki");
+			if(!Directory.Exists(appData)) {
+				Directory.CreateDirectory(appData);
+			}
+			appData = Path.Combine(appData, "FutaMaki.Reader");
+			if(!Directory.Exists(appData)) {
+				Directory.CreateDirectory(appData);
+			}
 			ReaderConfigs.ConfigLoader.Initialize(new ReaderConfigs.ConfigLoader.Setting(
 				readerDirectory: readerDirectory,
-				saveDirectory: saveDirectory
+				saveDirectory: saveDirectory,
+				appDataDirectory: appData
 				));
 
 			base.OnStartup(e);
@@ -55,6 +58,8 @@ namespace Yarukizero.Net.MakiMoki.Reader {
 		protected override void RegisterTypes(IContainerRegistry containerRegistry) {
 			base.ConfigureViewModelLocator();
 			ViewModelLocationProvider.Register<Windows.MainWindow, ViewModels.MainViewModel>();
+			ViewModelLocationProvider.Register<Windows.ConfigDialog, ViewModels.ConfigDialogViewModel>();
+			containerRegistry.RegisterDialog<Windows.ConfigDialog, ViewModels.ConfigDialogViewModel>();
 		}
 	}
 }

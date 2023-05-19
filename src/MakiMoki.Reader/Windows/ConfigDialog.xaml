@@ -1,0 +1,517 @@
+<UserControl
+    x:Class="Yarukizero.Net.MakiMoki.Reader.Windows.ConfigDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:ri="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Yarukizero.Net.MakiMoki.Reader.Windows"
+    mc:Ignorable="d"
+    MinWidth="450" MinHeight="450">
+    <ScrollViewer>
+        <Border Padding="4">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="4" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="4" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock
+                    Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"
+                    Text="基本設定"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    FontWeight="Bold"
+                    />
+                <TextBlock
+                    Grid.Column="0" Grid.Row="1"
+                    VerticalAlignment="Center"
+                    Text="棒読みちゃんURL"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="1"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    Text="{Binding BouyomiChanUrl.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    />
+
+                <CheckBox
+                    Grid.Column="0"  Grid.ColumnSpan="3" Grid.Row="3"
+                    Content="IDのレスを読み上げる"
+                    IsChecked="{Binding EnableSpeakId.Value, Mode=TwoWay}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <CheckBox
+                    Grid.Column="0"  Grid.ColumnSpan="3" Grid.Row="5"
+                    Content="削除/隔離されたレスを読み上げる"
+                    IsChecked="{Binding EnableSpeakDel.Value, Mode=TwoWay}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <CheckBox
+                    Grid.Column="0"  Grid.ColumnSpan="3" Grid.Row="7"
+                    Content="手書きを自動保存する"
+                    IsChecked="{Binding EnableSaveResImage.Value, Mode=TwoWay}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <CheckBox
+                    Grid.Column="0"  Grid.ColumnSpan="3" Grid.Row="9"
+                    Content="あぷファイルを自動保存する"
+                    IsChecked="{Binding EnableSaveUploadFile.Value, Mode=TwoWay}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <CheckBox
+                    Grid.Column="0"  Grid.ColumnSpan="3" Grid.Row="11"
+                    Content="ログを自動保存する"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    IsChecked="{Binding EnableSaveLog.Value, Mode=TwoWay}"
+                    Visibility="Collapsed"
+                    />
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="13"
+                    VerticalAlignment="Top"
+                    Text="スレ立て時サウンド"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <Grid Grid.Column="2" Grid.Row="13">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ComboBox
+                        Grid.Column="0" Grid.ColumnSpan="4"  Grid.Row="0"
+                        SelectedIndex="{Binding EnabledSpeakThreadCreated.Value, Mode=TwoWay}">
+                        <ComboBoxItem>再生しない</ComboBoxItem>
+                        <ComboBoxItem>サウンドファイル</ComboBoxItem>
+                        <ComboBoxItem>棒読みちゃん</ComboBoxItem>
+                    </ComboBox>
+                    
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="2"
+                        VerticalAlignment="Center"
+                        Text="ファイル"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.Row="2"
+                        Text="{Binding SoundSpeakThreadCreated.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <Button
+                        Grid.Column="3" Grid.Row="2"
+                        Padding="4,0,4,0"
+                        Content="選択"
+                        FontFamily="{StaticResource MakimokiUiFont}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ri:EventToReactiveCommand Command="{Binding FileSpeakThreadCreatedClickCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers> 
+                    </Button>
+
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="4"
+                        VerticalAlignment="Center"
+                        Text="メッセージ"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4"
+                        Text="{Binding MessageSpeakThreadCreated.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                </Grid>
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="15"
+                    VerticalAlignment="Top"
+                    Text="読み上げ開始サウンド"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <Grid Grid.Column="2" Grid.Row="15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ComboBox
+                        Grid.Column="0" Grid.ColumnSpan="4"  Grid.Row="0"
+                        SelectedIndex="{Binding EnabledSpeakStartRead.Value, Mode=TwoWay}">
+                        <ComboBoxItem>再生しない</ComboBoxItem>
+                        <ComboBoxItem>サウンドファイル</ComboBoxItem>
+                        <ComboBoxItem>棒読みちゃん</ComboBoxItem>
+                    </ComboBox>
+
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="2"
+                        VerticalAlignment="Center"
+                        Text="ファイル"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.Row="2"
+                        Text="{Binding SoundSpeakStartRead.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <Button
+                        Grid.Column="3" Grid.Row="2"
+                        Padding="4,0,4,0"
+                        Content="選択"
+                        FontFamily="{StaticResource MakimokiUiFont}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ri:EventToReactiveCommand Command="{Binding FileSpeakStartReadClickCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="4"
+                        VerticalAlignment="Center"
+                        Text="メッセージ"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4"
+                        Text="{Binding MessageSpeakStartRead.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                </Grid>
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="17"
+                    VerticalAlignment="Top"
+                    Text="手書き保存サウンド"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <Grid Grid.Column="2" Grid.Row="17">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ComboBox
+                        Grid.Column="0" Grid.ColumnSpan="4"  Grid.Row="0"
+                        SelectedIndex="{Binding EnabledSpeakImageSave.Value, Mode=TwoWay}">
+                        <ComboBoxItem>再生しない</ComboBoxItem>
+                        <ComboBoxItem>サウンドファイル</ComboBoxItem>
+                        <ComboBoxItem>棒読みちゃん</ComboBoxItem>
+                    </ComboBox>
+
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="2"
+                        VerticalAlignment="Center"
+                        Text="ファイル"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.Row="2"
+                        Text="{Binding SoundSpeakImageSave.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <Button
+                        Grid.Column="3" Grid.Row="2"
+                        Padding="4,0,4,0"
+                        Content="選択"
+                        FontFamily="{StaticResource MakimokiUiFont}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ri:EventToReactiveCommand Command="{Binding FileSpeakImageSaveClickCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="4"
+                        VerticalAlignment="Center"
+                        Text="メッセージ"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4"
+                        Text="{Binding MessageSpeakImageSave.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                </Grid>
+                <TextBlock
+                    Grid.Column="0" Grid.Row="19"
+                    VerticalAlignment="Center"
+                    Text="スレ落ち警告"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <Grid Grid.Column="2" Grid.Row="19">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ComboBox
+                        Grid.Column="0" Grid.ColumnSpan="4"  Grid.Row="0"
+                        SelectedIndex="{Binding EnabledSpeakThreadOld.Value, Mode=TwoWay}">
+                        <ComboBoxItem>再生しない</ComboBoxItem>
+                        <ComboBoxItem>サウンドファイル</ComboBoxItem>
+                        <ComboBoxItem>棒読みちゃん</ComboBoxItem>
+                    </ComboBox>
+
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="2"
+                        VerticalAlignment="Center"
+                        Text="ファイル"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.Row="2"
+                        Text="{Binding SoundSpeakThreadOld.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <Button
+                        Grid.Column="3" Grid.Row="2"
+                        Padding="4,0,4,0"
+                        Content="選択"
+                        FontFamily="{StaticResource MakimokiUiFont}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ri:EventToReactiveCommand Command="{Binding FileSpeakThreadOldClickCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="4"
+                        VerticalAlignment="Center"
+                        Text="メッセージ"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4"
+                        Text="{Binding MessageSpeakThreadOld.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                </Grid>
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="21"
+                    VerticalAlignment="Center"
+                    Text="スレ落ちサウンド"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <Grid Grid.Column="2" Grid.Row="21">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="4" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="4" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ComboBox
+                        Grid.Column="0" Grid.ColumnSpan="4"  Grid.Row="0"
+                        SelectedIndex="{Binding EnabledSpeakThreadDie.Value, Mode=TwoWay}">
+                        <ComboBoxItem>再生しない</ComboBoxItem>
+                        <ComboBoxItem>サウンドファイル</ComboBoxItem>
+                        <ComboBoxItem>棒読みちゃん</ComboBoxItem>
+                    </ComboBox>
+
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="2"
+                        VerticalAlignment="Center"
+                        Text="ファイル"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.Row="2"
+                        Text="{Binding SoundSpeakThreadDie.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <Button
+                        Grid.Column="3" Grid.Row="2"
+                        Padding="4,0,4,0"
+                        Content="選択"
+                        FontFamily="{StaticResource MakimokiUiFont}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ri:EventToReactiveCommand Command="{Binding FileSpeakThreadDieClickCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+
+                    <TextBlock
+                        Grid.Column="0" Grid.Row="4"
+                        VerticalAlignment="Center"
+                        Text="メッセージ"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                    <TextBox
+                        Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="4"
+                        Text="{Binding MessageSpeakThreadDie.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        FontFamily="{StaticResource MakimokiUiFont}"
+                        />
+                </Grid>
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="23"
+                    VerticalAlignment="Center"
+                    Text="スレ落ち警告(秒)"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="23"
+                    Text="{Binding WaitTimeOldThread.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="25"
+                    VerticalAlignment="Center"
+                    Text="スレ取得間隔(秒)"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="25"
+                    Text="{Binding WaitTimeFetchApi.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    /> 
+                
+                <TextBlock
+                    Grid.Column="0" Grid.Row="27"
+                    VerticalAlignment="Center"
+                    Text="NG設定"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    FontWeight="Bold"
+                    />
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="28"
+                    VerticalAlignment="Top"
+                    Text="NGワード"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="28"
+                    AcceptsReturn="True"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Visible"
+                    Height="100"
+                    Text="{Binding NgWord.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <TextBlock
+                    Grid.Column="0" Grid.Row="30"
+                    VerticalAlignment="Top"
+                    Text="NG正規表現"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+                <TextBox
+                    Grid.Column="2" Grid.Row="30"
+                    AcceptsReturn="True"
+                    HorizontalScrollBarVisibility="Auto"
+                    VerticalScrollBarVisibility="Visible"
+                    Height="100"
+                    Text="{Binding NgRegex.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    FontFamily="{StaticResource MakimokiUiFont}"
+                    />
+
+                <Grid
+                    Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="32"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    >
+                    <Button
+                        Width="64"
+                        Height="32"
+                        Content="保存">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ri:EventToReactiveCommand Command="{Binding SaveClickCommand}" />
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </Grid>
+            </Grid>
+        </Border>
+    </ScrollViewer>
+</UserControl>
