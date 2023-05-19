@@ -239,7 +239,7 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 			try {
 				this.IsReading.Value = true;
 				this.readerTask = ReaderUtils.ThreadReader.Start(string.IsNullOrEmpty(this.InputUrl.Value) switch {
-					true => $"{this.BoardUrl.Value}/res/{this.threadNo}.htm",
+					true => $"{this.BoardUrl.Value}res/{this.threadNo}.htm",
 					false => this.InputUrl.Value,
 				}, this.cancellationTokenSource, OnThreadDie);
 				return true;
