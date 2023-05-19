@@ -17,15 +17,28 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderData {
 		[JsonProperty("speak-del", Required = Required.Always)]
 		public bool SpeakDel { get; private set; } = false;
 		[JsonProperty("enable-speak-thread-created", Required = Required.Always)]
-		public SpeakMessage EnabledSpeakThreadCreated { get; private set; } = SpeakMessage.BpuyomiChan;
+		public SpeakMessage EnabledSpeakThreadCreated { get; private set; } = SpeakMessage.BouyomiChan;
 		[JsonProperty("enable-speak-start-read", Required = Required.Always)]
-		public SpeakMessage EnabledSpeakStartRead { get; private set; } = SpeakMessage.BpuyomiChan;
+		public SpeakMessage EnabledSpeakStartRead { get; private set; } = SpeakMessage.BouyomiChan;
 		[JsonProperty("enable-speak-image-save", Required = Required.Always)]
-		public SpeakMessage EnabledSpeakImageSave { get; private set; } = SpeakMessage.BpuyomiChan;
+		public SpeakMessage EnabledSpeakImageSave { get; private set; } = SpeakMessage.BouyomiChan;
 		[JsonProperty("enable-speak-thread-old", Required = Required.Always)]
-		public SpeakMessage EnabledSpeakThreadOld { get; private set; } = SpeakMessage.BpuyomiChan;
+		public SpeakMessage EnabledSpeakThreadOld { get; private set; } = SpeakMessage.BouyomiChan;
 		[JsonProperty("enable-speak-thread-die", Required = Required.Always)]
-		public SpeakMessage EnabledSpeakThreadDie { get; private set; } = SpeakMessage.BpuyomiChan;
+		public SpeakMessage EnabledSpeakThreadDie { get; private set; } = SpeakMessage.BouyomiChan;
+
+		[JsonIgnore]
+		public string SoundThreadCreated { get; private set; } = "";
+		[JsonIgnore]
+		public string SoundStartRead { get; private set; } = "";
+		[JsonIgnore]
+		public string SoundImageSave { get; private set; } = "";
+		[JsonIgnore]
+		public string SoundThreadOld { get; private set; } = "";
+		[JsonIgnore]
+		public string SoundSpeakThreadDie { get; private set; } = "";
+
+
 		[JsonProperty("bouyomichan-speak-thread-created", Required = Required.Always)]
 		public string MessageThreadCreated { get; private set; } = "スレッドが立ちました。";
 		[JsonProperty("bouyomichan-speak-start-read", Required = Required.Always)]
@@ -48,7 +61,7 @@ namespace Yarukizero.Net.MakiMoki.Reader.ReaderData {
 	internal enum SpeakMessage {
 		Disable,
 		Wave,
-		BpuyomiChan,
+		BouyomiChan,
 	}
 
 	internal class NgConfig : ConfigObject {

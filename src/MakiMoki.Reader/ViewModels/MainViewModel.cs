@@ -18,10 +18,10 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 		[DllImport("shell32.dll", CharSet = CharSet.Unicode)]
 		public static extern IntPtr ShellExecute(
 			IntPtr hwnd,
-			[MarshalAs(UnmanagedType.LPWStr)] string lpVerb,
-			[MarshalAs(UnmanagedType.LPWStr)] string lpFile,
-			[MarshalAs(UnmanagedType.LPWStr)] string lpParameters,
-			[MarshalAs(UnmanagedType.LPWStr)] string lpDirectory,
+			[MarshalAs(UnmanagedType.LPWStr)] string? lpVerb,
+			[MarshalAs(UnmanagedType.LPWStr)] string? lpFile,
+			[MarshalAs(UnmanagedType.LPWStr)] string? lpParameters,
+			[MarshalAs(UnmanagedType.LPWStr)] string? lpDirectory,
 			int nShowCmd);
 
 		private enum Navigation {
@@ -194,7 +194,7 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 						switch(ReaderConfigs.ConfigLoader.Config.EnabledSpeakThreadCreated) {
 						case ReaderData.SpeakMessage.Wave:
 							break;
-						case ReaderData.SpeakMessage.BpuyomiChan:
+						case ReaderData.SpeakMessage.BouyomiChan:
 							ThreadReader.Speak(ReaderConfigs.ConfigLoader.Config.MessageThreadCreated);
 							break;
 						}
