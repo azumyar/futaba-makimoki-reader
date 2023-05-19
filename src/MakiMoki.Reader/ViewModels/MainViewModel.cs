@@ -52,6 +52,7 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 		private ReactivePropertySlim<bool> IsReading { get; } = new ReactivePropertySlim<bool>(initialValue:true);
 
 		public IReadOnlyReactiveProperty<string> ReadingMessage { get; }
+		public IReadOnlyReactiveProperty<Visibility> CurrentReaderVisibility { get; }
 		public IReadOnlyReactiveProperty<Visibility> NextReaderVisibility { get; }
 
 
@@ -96,6 +97,18 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 				true => MessageThreadReading,
 				false => MessageThreadDie
 			}).ToReadOnlyReactivePropertySlim<string>();
+			this.CurrentReaderVisibility = this.IsReading.CombineLatest(this.InputUrl,
+				(x, y) => { 
+					if(!string.IsNullOrEmpty(y)) {
+						// スレ読みは常に表示
+						return Visibility.Visible;
+					} else {
+						return x switch {
+							true => Visibility.Visible,
+							false => Visibility.Collapsed,
+						};
+					}
+				}).ToReadOnlyReactivePropertySlim();
 			this.NextReaderVisibility = this.IsReading.CombineLatest(this.InputUrl,
 				(x, y) => (!x && string.IsNullOrEmpty(y)) switch {
 					true => Visibility.Visible,
@@ -190,15 +203,15 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 					App.Current.Cookie = x.Cookies;
 					if(x.Successed) {
 						this.threadNo = x.NextOrMessage;
-
-						switch(ReaderConfigs.ConfigLoader.Config.EnabledSpeakThreadCreated) {
-						case ReaderData.SpeakMessage.Wave:
-							break;
-						case ReaderData.SpeakMessage.BouyomiChan:
-							ThreadReader.Speak(ReaderConfigs.ConfigLoader.Config.MessageThreadCreated);
-							break;
+						ThreadReader.FireEvent(
+							ReaderConfigs.ConfigLoader.Config.EnabledSpeakThreadCreated,
+							ReaderConfigs.ConfigLoader.Config.SoundThreadCreated,
+							ReaderConfigs.ConfigLoader.Config.MessageThreadCreated);
+						Logger.Instance.Clear();
+						Logger.Instance.Info($"スレッドが立ちました => {x.NextOrMessage}");
+						if(this.StartRead()) {
+							this.Navigate.Value = Navigation.Reader;
 						}
-						this.StartReaderFromInputCommand.Execute();
 					} else {
 						MessageBox.Show(x.NextOrMessage);
 					}
@@ -214,18 +227,27 @@ namespace Yarukizero.Net.MakiMoki.Reader.ViewModels {
 			});
 
 			this.StartReaderFromInputCommand.Subscribe(() => {
-				this.cancellationTokenSource = new CancellationTokenSource();
-				try {
-					this.IsReading.Value = true;
+				Logger.Instance.Clear();
+				if(this.StartRead()) {
 					this.Navigate.Value = Navigation.Reader;
-					this.readerTask = ReaderUtils.ThreadReader.Start(string.IsNullOrEmpty(this.InputUrl.Value) switch {
-						true => $"{this.BoardUrl.Value}/res/{this.threadNo}.htm",
-						false => this.InputUrl.Value,
-					}, this.cancellationTokenSource, OnThreadDie);
-				}
-				catch(InvalidOperationException) {
 				}
 			});
+		}
+
+		private bool StartRead() {
+			this.cancellationTokenSource = new CancellationTokenSource();
+			try {
+				this.IsReading.Value = true;
+				this.readerTask = ReaderUtils.ThreadReader.Start(string.IsNullOrEmpty(this.InputUrl.Value) switch {
+					true => $"{this.BoardUrl.Value}/res/{this.threadNo}.htm",
+					false => this.InputUrl.Value,
+				}, this.cancellationTokenSource, OnThreadDie);
+				return true;
+			}
+			catch(InvalidOperationException e) {
+				MessageBox.Show($"読み上げに失敗しました\r\n{e.Message}");
+				return false;
+			}
 		}
 
 		private void OnThreadDie() {

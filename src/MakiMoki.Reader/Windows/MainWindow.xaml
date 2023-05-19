@@ -6,6 +6,7 @@
     xmlns:ri="clr-namespace:Reactive.Bindings.Interactivity;assembly=ReactiveProperty.WPF"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:log="clr-namespace:Yarukizero.Net.MakiMoki.Reader.ReaderUtils"
     xmlns:local="clr-namespace:Yarukizero.Net.MakiMoki.Reader.Windows"
     mc:Ignorable="d"
     Title="MainWindow" Height="450" Width="450">
@@ -299,6 +300,27 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
+
+                <TextBox
+                    x:Name="textBoxLog"
+                    Grid.Column="0" Grid.ColumnSpan="2"
+                    Grid.Row="2" Grid.RowSpan="3"
+                    Visibility="{Binding CurrentReaderVisibility.Value, Mode=OneWay}"
+                    VerticalScrollBarVisibility="Visible"
+                    HorizontalScrollBarVisibility="Auto"
+                    AcceptsReturn="True"
+                    IsReadOnly="True"
+                    Text="{Binding Log.Value, Mode=OneWay}"
+                    DataContext="{x:Static log:Logger.Instance}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:CallMethodAction
+                                TargetObject="{Binding ElementName=textBoxLog}"
+                                MethodName="ScrollToEnd"
+                                />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
 
                 <TextBlock
                     Grid.Column="0" Grid.Row="2"

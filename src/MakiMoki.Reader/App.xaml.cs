@@ -18,27 +18,32 @@ namespace Yarukizero.Net.MakiMoki.Reader {
 	/// Interaction logic for App.xaml
 	/// </summary>
 	public partial class App : PrismApplication {
-		public string? UserRootDirectory { get; private set; }
-		public string? RederDirectory { get; private set; }
-
+		[Obsolete]
 		public Data.Cookie2[] Cookie { get; set; } = Array.Empty<Data.Cookie2>();
 
-		public static App? Current { get; private set; }
+		public new static App? Current { get; private set; }
 
 		protected override void OnStartup(StartupEventArgs e) {
 			Current = this;
 			Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 			Reactive.Bindings.UIDispatcherScheduler.Initialize();
 
-			this.UserRootDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FutaMaki");
-			if(!Directory.Exists(this.UserRootDirectory)) {
-				Directory.CreateDirectory(this.UserRootDirectory);
+			var userRoot = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "FutaMaki");
+			if(!Directory.Exists(userRoot)) {
+				Directory.CreateDirectory(userRoot);
 			}
-			this.RederDirectory = Path.Combine(this.UserRootDirectory, "Reader");
-			if(!Directory.Exists(this.RederDirectory)) {
-				Directory.CreateDirectory(this.RederDirectory);
+			var readerDirectory = Path.Combine(userRoot, "Reader");
+			if(!Directory.Exists(readerDirectory)) {
+				Directory.CreateDirectory(readerDirectory);
 			}
-			ReaderConfigs.ConfigLoader.Initialize();
+			var saveDirectory = Path.Combine(readerDirectory, "Save");
+			if(!Directory.Exists(saveDirectory)) {
+				Directory.CreateDirectory(saveDirectory);
+			}
+			ReaderConfigs.ConfigLoader.Initialize(new ReaderConfigs.ConfigLoader.Setting(
+				readerDirectory: readerDirectory,
+				saveDirectory: saveDirectory
+				));
 
 			base.OnStartup(e);
 		}
