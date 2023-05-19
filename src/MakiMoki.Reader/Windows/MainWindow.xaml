@@ -275,8 +275,8 @@
                     <RowDefinition Height="4" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="4" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <TextBlock
@@ -323,7 +323,7 @@
                 </Button>
 
                 <TextBlock
-                    Grid.Column="0" Grid.Row="12"
+                    Grid.Column="0" Grid.Row="4"
                     Visibility="{Binding NextReaderVisibility.Value, Mode=OneWay}"
                     Text="本文"
                     FontFamily="{StaticResource MakimokiUiFont}"
